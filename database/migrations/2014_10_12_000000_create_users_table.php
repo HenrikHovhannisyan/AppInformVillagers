@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('phone')->unique()->nullable();
             $table->string('verification_code')->nullable();
             $table->boolean('is_verified')->default(false);
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
