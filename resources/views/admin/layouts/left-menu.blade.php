@@ -3,7 +3,7 @@
         <i class="fa-solid fa-chart-line"></i>
         Dashboard
     </a>
-    <a href="#" class="border-bottom text-light list-group-item w-100 d-block p-2">
+    <a href="{{ route("users.index") }}" class="border-bottom text-light list-group-item w-100 d-block p-2">
         <i class="fa-regular fa-user"></i>
         Users
     </a>

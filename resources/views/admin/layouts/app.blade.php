@@ -26,7 +26,7 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
@@ -83,12 +83,19 @@
             <div id="wrapper">
                 @include('admin.layouts.left-menu')
                 <div id="page-content-wrapper">
+
                     <button type="button" id="menu-toggle-2" data-toggle="collapse" class="btn btn-dark mb-3 d-none d-md-block">
                         <i class="fas fa-align-left"></i>
                     </button>
                     <button type="button" class="btn btn-dark mb-3 d-block d-md-none" data-toggle="collapse" id="menu-toggle">
                         <i class="fas fa-align-left"></i>
                     </button>
+
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
                     @yield('content')
                 </div>
             </div>
