@@ -19,11 +19,11 @@
                         </thead>
                         <tbody>
                         @foreach($users as $user)
-                            <tr>
+                            <tr class="{{ $user->status ? 'table-success' : 'table-danger' }}">
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ $user->phone ? $user->phone : 'Phone number missing' }}</td>
                                 <td>
-                                    {{ $user->	is_verified ? 'Yes' : 'No' }}
+                                    {{ $user->is_verified ? 'Yes' : 'No' }}
                                 </td>
                                 <td class="d-flex align-items-center justify-content-between">
                                     {{ $user->status ? 'Active' : 'Inactive' }}
