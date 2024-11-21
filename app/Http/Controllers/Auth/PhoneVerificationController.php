@@ -12,18 +12,30 @@ class PhoneVerificationController extends Controller
 {
     public function sendVerificationCode(Request $request)
     {
-        $request->validate(['phone' => 'required|unique:users,phone']);
+        try {
+            $request->validate(['phone' => 'required|unique:users,phone']);
 
-        $verificationCode = rand(100000, 999999);
+            $verificationCode = rand(100000, 999999);
 
-        $user = User::create([
-            'phone' => $request->phone,
-            'verification_code' => $verificationCode,
-        ]);
+            $user = User::create([
+                'phone' => $request->phone,
+                'verification_code' => $verificationCode,
+            ]);
 
-        $this->sendSms($request->phone, "Your confirmation code: $verificationCode");
+            $this->sendSms($request->phone, "Your confirmation code: $verificationCode");
 
-        return response()->json(['message' => 'Code sent'], 200);
+            return response()->json(['message' => 'Code sent'], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'validation-error',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Internal server error',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function verifyCode(Request $request)
