@@ -27,37 +27,45 @@ class PhoneVerificationController extends Controller
             return response()->json(['message' => 'Code sent'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
-                'message' => 'validation-error',
-                'errors' => $e->errors(),
+                'errors' => collect($e->errors())->flatten()->first(), // Берём только первое сообщение
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Internal server error',
-                'error' => $e->getMessage(),
+                'errors' => 'Internal server error: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     public function verifyCode(Request $request)
     {
-        $request->validate([
-            'verification_code' => 'required',
-            'password' => 'required|confirmed|min:8',
-        ]);
+        try {
+            $request->validate([
+                'verification_code' => 'required',
+                'password' => 'required|confirmed|min:8',
+            ]);
 
-        $user = User::where('verification_code', $request->verification_code)->first();
+            $user = User::where('verification_code', $request->verification_code)->first();
 
-        if (!$user) {
-            return response()->json(['message' => 'Invalid code'], 422);
+            if (!$user) {
+                return response()->json(['errors' => 'Invalid code'], 422);
+            }
+
+            $user->update([
+                'is_verified' => true,
+                'password' => Hash::make($request->password),
+                'verification_code' => null,
+            ]);
+
+            return response()->json(['message' => 'User registered successfully'], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'errors' => collect($e->errors())->flatten()->first(), // Берём только первое сообщение
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'errors' => 'Internal server error: ' . $e->getMessage(),
+            ], 500);
         }
-
-        $user->update([
-            'is_verified' => true,
-            'password' => Hash::make($request->password),
-            'verification_code' => null,
-        ]);
-
-        return response()->json(['message' => 'User registered successfully'], 200);
     }
 
     private function sendSms($phone, $message)
@@ -70,7 +78,7 @@ class PhoneVerificationController extends Controller
             ]);
         } catch (\Exception $e) {
             \Log::error('Twilio Error: ' . $e->getMessage());
-            return response()->json(['message' => 'Failed to send SMS'], 500);
+            return response()->json(['errors' => 'Failed to send SMS'], 500);
         }
     }
 }
