@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/send-verification-code', [PhoneVerificationController::class, 'sendVerificationCode']);
 Route::post('/verify-code', [PhoneVerificationController::class, 'verifyCode']);
+Route::post('/login', [PhoneVerificationController::class, 'login']);

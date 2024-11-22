@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Twilio\Rest\Client;
 
 class PhoneVerificationController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function sendVerificationCode(Request $request)
     {
         try {
@@ -36,6 +41,10 @@ class PhoneVerificationController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function verifyCode(Request $request)
     {
         try {
@@ -68,6 +77,11 @@ class PhoneVerificationController extends Controller
         }
     }
 
+    /**
+     * @param $phone
+     * @param $message
+     * @return JsonResponse
+     */
     private function sendSms($phone, $message)
     {
         try {
@@ -81,5 +95,48 @@ class PhoneVerificationController extends Controller
             return response()->json(['errors' => 'Failed to send SMS'], 500);
         }
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function login(Request $request)
+    {
+        try {
+            $request->validate([
+                'phone' => 'required|exists:users,phone',
+                'password' => 'required',
+            ]);
+
+            $user = User::where('phone', $request->phone)->first();
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json(['errors' => 'Invalid phone number or password'], 422);
+            }
+
+            if (!$user->is_verified) {
+                return response()->json(['errors' => 'Phone number not verified'], 403);
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            $response = [
+                'message' => 'Login successful',
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ];
+
+            return response()->json($response, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'errors' => collect($e->errors())->flatten()->first(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'errors' => 'Internal server error: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }
 
