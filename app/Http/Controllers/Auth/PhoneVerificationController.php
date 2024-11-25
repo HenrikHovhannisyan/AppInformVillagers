@@ -100,6 +100,10 @@ class PhoneVerificationController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function login(Request $request)
     {
         try {
@@ -116,6 +120,10 @@ class PhoneVerificationController extends Controller
 
             if (!$user->is_verified) {
                 return response()->json(['errors' => 'Phone number not verified'], 403);
+            }
+
+            if (!$user->status) {
+                return response()->json(['errors' => 'Your account is inactive.'], 403);
             }
 
             $token = $user->createToken('auth_token')->plainTextToken;
@@ -137,6 +145,7 @@ class PhoneVerificationController extends Controller
             ], 500);
         }
     }
+
 
 }
 
