@@ -20,7 +20,8 @@ class PhoneVerificationController extends Controller
         try {
             $request->validate(['phone' => 'required|unique:users,phone']);
 
-            $verificationCode = rand(100000, 999999);
+//            $verificationCode = rand(100000, 999999);
+            $verificationCode = 123456;
 
             $user = User::create([
                 'phone' => $request->phone,
