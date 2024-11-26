@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Auth\PhoneVerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,3 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/send-verification-code', [PhoneVerificationController::class, 'sendVerificationCode']);
 Route::post('/verify-code', [PhoneVerificationController::class, 'verifyCode']);
 Route::post('/login', [PhoneVerificationController::class, 'login']);
+Route::apiResource('users', UserController::class);
+Route::post('user/{user}/update', [UserController::class, 'update']);

@@ -115,10 +115,6 @@ class PhoneVerificationController extends Controller
 
             $user = User::where('phone', $request->phone)->first();
 
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                return response()->json(['errors' => 'Invalid phone number or password'], 422);
-            }
-
             if (!$user->is_verified) {
                 return response()->json(['errors' => 'Phone number not verified'], 403);
             }
@@ -127,12 +123,22 @@ class PhoneVerificationController extends Controller
                 return response()->json(['errors' => 'Your account is inactive.'], 403);
             }
 
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json(['errors' => 'Invalid phone number or password'], 422);
+            }
+
             $token = $user->createToken('auth_token')->plainTextToken;
+
+            $avatarUrl = $user->avatar ? asset($user->avatar) : null;
+
+            $userData = $user->only(['id', 'name', 'surname', 'email', 'phone', 'role']);
+            $userData['avatar'] = $avatarUrl; // Добавляем ссылку на аватар
 
             $response = [
                 'message' => 'Login successful',
                 'access_token' => $token,
                 'token_type' => 'Bearer',
+                'user' => $userData,
             ];
 
             return response()->json($response, 200);
@@ -146,7 +152,6 @@ class PhoneVerificationController extends Controller
             ], 500);
         }
     }
-
 
 }
 
