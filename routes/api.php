@@ -25,3 +25,5 @@ Route::post('/verify-code', [PhoneVerificationController::class, 'verifyCode']);
 Route::post('/login', [PhoneVerificationController::class, 'login']);
 Route::apiResource('users', UserController::class);
 Route::post('user/{user}/update', [UserController::class, 'update']);
+Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'show']);
+

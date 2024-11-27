@@ -33,7 +33,7 @@ class PhoneVerificationController extends Controller
             return response()->json(['message' => 'Code sent'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
-                'errors' => collect($e->errors())->flatten()->first(), // Берём только первое сообщение
+                'errors' => collect($e->errors())->flatten()->first(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
@@ -69,7 +69,7 @@ class PhoneVerificationController extends Controller
             return response()->json(['message' => 'User registered successfully'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
-                'errors' => collect($e->errors())->flatten()->first(), // Берём только первое сообщение
+                'errors' => collect($e->errors())->flatten()->first(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
@@ -132,7 +132,7 @@ class PhoneVerificationController extends Controller
             $avatarUrl = $user->avatar ? asset($user->avatar) : null;
 
             $userData = $user->only(['id', 'name', 'surname', 'email', 'phone', 'role']);
-            $userData['avatar'] = $avatarUrl; // Добавляем ссылку на аватар
+            $userData['avatar'] = $avatarUrl;
 
             $response = [
                 'message' => 'Login successful',

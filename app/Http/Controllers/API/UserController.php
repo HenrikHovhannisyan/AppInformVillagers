@@ -42,11 +42,12 @@ class UserController extends Controller
 
     /**
      * Display the specified user.
-     * @param User $user
      * @return JsonResponse
      */
-    public function show(User $user)
+    public function show()
     {
+        $user = auth()->user();
+
         $responseUser = [
             'id' => $user->id,
             'name' => $user->name,
