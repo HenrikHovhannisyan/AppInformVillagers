@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Auth\PhoneVerificationController;
 use Illuminate\Http\Request;
@@ -26,4 +27,7 @@ Route::post('/login', [PhoneVerificationController::class, 'login']);
 Route::apiResource('users', UserController::class);
 Route::post('user/{user}/update', [UserController::class, 'update']);
 Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'show']);
+Route::middleware('auth:sanctum')->get('/account', [AccountController::class, 'show']);
+Route::put('account', [AccountController::class, 'update']);
+
 

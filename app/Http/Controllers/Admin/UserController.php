@@ -69,7 +69,7 @@ class UserController extends Controller
     public function toggleStatus($id)
     {
         $user = User::findOrFail($id);
-        $user->status = !$user->status; // Переключение статуса
+        $user->status = !$user->status;
         $user->save();
 
         return redirect()->back()->with('success', 'User status updated successfully.');

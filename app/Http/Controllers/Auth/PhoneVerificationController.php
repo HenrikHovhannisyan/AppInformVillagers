@@ -66,6 +66,20 @@ class PhoneVerificationController extends Controller
                 'verification_code' => null,
             ]);
 
+            $user->account()->create([
+                'field_size' => null,
+                'tree_count' => null,
+                'olive_type' => null,
+                'age_of_trees' => null,
+                'location_of_field' => null,
+                'continuous_season_count' => null,
+                'total_harvested_olives' => null,
+                'total_gained_oil' => null,
+                'account_creation_date' => now(),
+                'edit_request' => false,
+                'admin_approval' => false,
+            ]);
+
             return response()->json(['message' => 'User registered successfully'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
