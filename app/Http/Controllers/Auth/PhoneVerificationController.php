@@ -24,6 +24,7 @@ class PhoneVerificationController extends Controller
             $verificationCode = 123456;
 
             $user = User::create([
+                'avatar' => '/images/default-avatar.png',
                 'phone' => $request->phone,
                 'verification_code' => $verificationCode,
             ]);
