@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -26,4 +27,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::patch('/admin/users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('admin.users.toggleStatus');
+
+    Route::patch('/admin/accounts/{account}/approve', [AccountController::class, 'approve'])->name('admin.accounts.approve');
+    Route::get('/admin/accounts/{account}/edit', [AccountController::class, 'edit'])->name('admin.accounts.edit');
+    Route::patch('/account/{account}', [AccountController::class, 'updateWeb'])->name('account.update');
+
 });

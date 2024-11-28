@@ -24,10 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/send-verification-code', [PhoneVerificationController::class, 'sendVerificationCode']);
 Route::post('/verify-code', [PhoneVerificationController::class, 'verifyCode']);
 Route::post('/login', [PhoneVerificationController::class, 'login']);
-Route::apiResource('users', UserController::class);
 Route::post('user/{user}/update', [UserController::class, 'update']);
 Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'show']);
 Route::middleware('auth:sanctum')->get('/account', [AccountController::class, 'show']);
-Route::put('account', [AccountController::class, 'update']);
-
-
+Route::middleware('auth:sanctum')->put('account', [AccountController::class, 'update']);
+Route::middleware('auth:sanctum')->put('/account/approve', [AccountController::class, 'approveAccount']);

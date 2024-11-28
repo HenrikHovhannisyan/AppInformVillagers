@@ -21,26 +21,6 @@ class UserController extends Controller
     }
 
     /**
-     * Display a listing of the users.
-     */
-    public function index()
-    {
-        $users = User::all()->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'name' => $user->name,
-                'surname' => $user->surname,
-                'avatar' => $user->avatar ? asset($user->avatar) : null,
-                'role' => $user->role,
-                'email' => $user->email,
-                'phone' => $user->phone,
-            ];
-        });
-
-        return response()->json($users, 200);
-    }
-
-    /**
      * Display the specified user.
      * @return JsonResponse
      */
