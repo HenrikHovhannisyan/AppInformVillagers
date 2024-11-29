@@ -27,5 +27,7 @@ Route::post('/login', [PhoneVerificationController::class, 'login']);
 Route::post('user/{user}/update', [UserController::class, 'update']);
 Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'show']);
 Route::middleware('auth:sanctum')->get('/account', [AccountController::class, 'show']);
-Route::middleware('auth:sanctum')->put('account', [AccountController::class, 'update']);
+//Route::middleware('auth:sanctum')->put('account', [AccountController::class, 'update']);
 Route::middleware('auth:sanctum')->put('/account/approve', [AccountController::class, 'approveAccount']);
+Route::middleware('auth:sanctum')->post('/account/update', [AccountController::class, 'update']);
+

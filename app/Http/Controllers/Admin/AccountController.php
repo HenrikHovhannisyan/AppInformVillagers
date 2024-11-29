@@ -41,6 +41,9 @@ class AccountController extends Controller
             'admin_approval',
         ]);
 
+        $filteredAccount['email'] = $user->email;
+        $filteredAccount['phone'] = $user->phone;
+
         return response()->json($filteredAccount, 200);
     }
 
