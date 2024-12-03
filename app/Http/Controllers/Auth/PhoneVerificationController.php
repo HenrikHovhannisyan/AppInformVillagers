@@ -81,6 +81,15 @@ class PhoneVerificationController extends Controller
                 'admin_approval' => false,
             ]);
 
+            $currentYear = now()->year;
+            for ($i = 0; $i < 5; $i++) {
+                $user->statistics()->create([
+                    'year' => $currentYear - $i,
+                    'olive_amount' => null,
+                    'oil_amount' => null,
+                ]);
+            }
+
             return response()->json(['message' => 'User registered successfully'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
