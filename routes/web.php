@@ -32,4 +32,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/accounts/{account}/edit', [AccountController::class, 'edit'])->name('admin.accounts.edit');
     Route::patch('/account/{account}', [AccountController::class, 'updateWeb'])->name('account.update');
 
+    Route::patch('/admin/users/{id}/statistics', [UserController::class, 'updateStatistic'])->name('admin.users.updateStatistic');
+
 });
