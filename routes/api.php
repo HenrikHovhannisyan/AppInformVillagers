@@ -30,4 +30,6 @@ Route::middleware('auth:sanctum')->get('/account', [AccountController::class, 's
 //Route::middleware('auth:sanctum')->put('account', [AccountController::class, 'update']);
 Route::middleware('auth:sanctum')->put('/account/approve', [AccountController::class, 'approveAccount']);
 Route::middleware('auth:sanctum')->post('/account/update', [AccountController::class, 'update']);
+Route::middleware('auth:sanctum')->get('/statistics', [UserController::class, 'getOwnStatistics']);
+
 

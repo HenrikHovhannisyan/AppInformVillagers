@@ -122,4 +122,26 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Get statistics for the authenticated user.
+     *
+     * @return JsonResponse
+     */
+    public function getOwnStatistics()
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json([
+                'error' => 'Unauthorized.',
+            ], 401);
+        }
+
+        $statistics = $user->statistics;
+
+        return response()->json([
+            'statistics' => $statistics,
+        ]);
+    }
+
 }
