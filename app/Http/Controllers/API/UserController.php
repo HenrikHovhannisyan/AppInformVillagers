@@ -137,11 +137,41 @@ class UserController extends Controller
             ], 401);
         }
 
-        $statistics = $user->statistics;
+        $idCounter = 1;
+        $maxValue = 0;
 
-        return response()->json([
+        $statistics = $user->statistics->flatMap(function ($stat) use (&$idCounter, &$maxValue) {
+            $currentMax = max($stat->olive_amount, $stat->oil_amount);
+
+            $maxValue = max($maxValue, $currentMax);
+
+            return [
+                [
+                    'id' => $idCounter++,
+                    'user_id' => $stat->user_id,
+                    'label' => $stat->year,
+                    'value' => $stat->olive_amount,
+                    'spacing' => 2,
+                    'labelWidth' => 120,
+                    'labelTextStyle' => ['color' => 'gray'],
+                    'frontColor' => '#1F5823',
+                ],
+                [
+                    'id' => $idCounter++,
+                    'user_id' => $stat->user_id,
+                    'year' => $stat->year,
+                    'value' => $stat->oil_amount,
+                    'frontColor' => '#BB850E',
+                ],
+            ];
+        });
+
+        $response = [
+            'max' => $maxValue,
             'statistics' => $statistics,
-        ]);
+        ];
+        return response()->json($response);
+
     }
 
 }
